@@ -1,4 +1,6 @@
 import { app, BrowserWindow } from 'electron';
+import installExtension, { REDUX_DEVTOOLS } from 'electron-devtools-installer';
+
 import path from 'path';
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -25,6 +27,10 @@ const createWindow = () => {
 
   // Open the DevTools.
   mainWindow.webContents.openDevTools();
+
+  installExtension(REDUX_DEVTOOLS)
+    .then((name) => console.log(`Added Extension:  ${name}`))
+    .catch((err) => console.log('An error occurred: ', err));
 };
 
 // This method will be called when Electron has finished
