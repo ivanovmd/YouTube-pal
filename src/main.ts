@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, dialog, ipcMain } from 'electron';
 import installExtension, { REDUX_DEVTOOLS } from 'electron-devtools-installer';
 
 import path from 'path';
@@ -31,6 +31,17 @@ const createWindow = () => {
   installExtension(REDUX_DEVTOOLS)
     .then((name) => console.log(`Added Extension:  ${name}`))
     .catch((err) => console.log('An error occurred: ', err));
+
+  ipcMain.handle('open-directory-dialog', async () => {
+    const { canceled, filePaths } = await dialog.showOpenDialog({
+      properties: ['openDirectory']
+    });
+    if (canceled) {
+      return null; // Handle cancellation or no selection
+    } else {
+      return filePaths[0]; // Return the selected directory path
+    }
+  });
 };
 
 // This method will be called when Electron has finished

@@ -2,6 +2,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { AppState } from '../store/store';
 import { Auth } from './auth';
+import Content from './content';
 
 const Main: React.FC = () => {
   const authToken = useSelector((state: AppState) => state.auth.authToken)
@@ -13,7 +14,10 @@ const Main: React.FC = () => {
         <h1>YT Pal</h1>
       </div>
 
-      {authToken ? <h3>Logged In</h3> : <Auth />}
+      {authToken ?
+        <Content />
+        :
+        <Auth />}
     </>
   );
 };
