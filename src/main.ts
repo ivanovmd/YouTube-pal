@@ -1,20 +1,31 @@
 import { app, BrowserWindow, dialog, ipcMain } from 'electron';
 import installExtension, { REDUX_DEVTOOLS } from 'electron-devtools-installer';
-
 import path from 'path';
+import { dbSlices } from './infrastructure/database/constants';
+import { Databases } from './infrastructure/database/databases';
+import { DatabaseSliceHandlers } from './infrastructure/database/handlers';
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
   app.quit();
 }
 
+const databaseNames = Object.values(dbSlices);
+const databases = new Databases(databaseNames).getDatabases();
+
+Object.keys(databases).forEach((dbName: string) => {
+  const db = databases[dbName];
+  new DatabaseSliceHandlers(dbName, db);
+})
+
 const createWindow = () => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1200,
+    height: 800,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
+      contextIsolation: true, // This should be true to use contextBridge
     },
   });
 
@@ -42,6 +53,7 @@ const createWindow = () => {
       return filePaths[0]; // Return the selected directory path
     }
   });
+
 };
 
 // This method will be called when Electron has finished

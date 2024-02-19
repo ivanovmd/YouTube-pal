@@ -2,6 +2,7 @@ export { };
 
 declare global {
   interface Window {
-    electron: Electron
+    electron: any,
+    database: any
   }
 }
