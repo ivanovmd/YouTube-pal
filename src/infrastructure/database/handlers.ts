@@ -13,7 +13,7 @@ export class DatabaseSliceHandlers {
   }
 
   icpHandler(operationName: string, db: any, handler: string) {
-    return ipcMain.handle(operationName, (...args) => db[handler](...args))
+    return ipcMain.handle(operationName, async (_, ...args) => await db[handler](...args))
   }
 
   getHandlers() {
