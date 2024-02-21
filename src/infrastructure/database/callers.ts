@@ -1,7 +1,12 @@
-import { databaseOperations } from "./constants";
+import { BRIDGE_NAME, DatabaseOperation, databaseOperations } from "./constants";
+
+
+type Callers = {
+  [key in DatabaseOperation]?: (...args: any) => Promise<any>;
+};
 
 export class DatabaseSliceCallers {
-  callers: any = {};
+  callers: Callers = {};
 
   constructor(databaseName: string) {
     databaseOperations.forEach(operation => {
@@ -10,7 +15,7 @@ export class DatabaseSliceCallers {
   }
 
   caller(operationName: string) {
-    return (...args: any) => window.database[operationName](...args)
+    return (...args: any) => window[BRIDGE_NAME][operationName](...args)
   }
 
   getCallers() {

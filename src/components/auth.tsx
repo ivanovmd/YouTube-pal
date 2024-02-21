@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { setAuthToken } from "../store/auth/authSlice";
 import { useGoogleLogin } from '@react-oauth/google';
-import { dbSlices } from "../infrastructure/database/constants";
+import { FIND, dbSlices } from "../infrastructure/database/constants";
 import { DatabaseSliceCallers } from "../infrastructure/database/callers";
 
 const downloadPathCallers = new DatabaseSliceCallers(dbSlices.DOWNLOAD_PATH).getCallers();
@@ -13,7 +13,7 @@ export const Auth = () => {
   const [downloadPath, setDownloadPath] = useState([]);
 
   useEffect(() => {
-    downloadPathCallers['find']({}).then((res: any) => {
+    downloadPathCallers.find({}).then((res: any) => {
       console.log(res);
       setDownloadPath(res);
     });
@@ -27,10 +27,10 @@ export const Auth = () => {
 
   const handleInsert = async () => {
     const downloadPath = '/hi/there';
-    await downloadPathCallers['insert']({ content: downloadPath });
+    await downloadPathCallers.insert({ content: downloadPath });
 
     // Re-fetch documents after insertion
-    const updatedDownloadPath = await downloadPathCallers['find']({})
+    const updatedDownloadPath = await downloadPathCallers.find({})
     console.log(updatedDownloadPath);
     setDownloadPath(updatedDownloadPath);
   };
@@ -49,7 +49,9 @@ export const Auth = () => {
       <button onClick={() => handleInsert()}>Add Data</button>
 
       <ul>
-        {downloadPath}
+        {downloadPath.map((path: any, index: number) => {
+          return path.content && <li key={index}>{path.content}</li>
+        })}
       </ul>
     </div>
   );

@@ -4,6 +4,7 @@ import path from 'path';
 import { dbSlices } from './infrastructure/database/constants';
 import { Databases } from './infrastructure/database/databases';
 import { DatabaseSliceHandlers } from './infrastructure/database/handlers';
+import { registerOpenDirectoryDialogHandler } from './infrastructure/fielSystem/getDownloadPath';
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -17,6 +18,8 @@ Object.keys(databases).forEach((dbName: string) => {
   const db = databases[dbName];
   new DatabaseSliceHandlers(dbName, db);
 })
+
+registerOpenDirectoryDialogHandler(ipcMain, dialog);
 
 const createWindow = () => {
   // Create the browser window.
@@ -42,18 +45,6 @@ const createWindow = () => {
   installExtension(REDUX_DEVTOOLS)
     .then((name) => console.log(`Added Extension:  ${name}`))
     .catch((err) => console.log('An error occurred: ', err));
-
-  ipcMain.handle('open-directory-dialog', async () => {
-    const { canceled, filePaths } = await dialog.showOpenDialog({
-      properties: ['openDirectory']
-    });
-    if (canceled) {
-      return null; // Handle cancellation or no selection
-    } else {
-      return filePaths[0]; // Return the selected directory path
-    }
-  });
-
 };
 
 // This method will be called when Electron has finished

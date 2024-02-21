@@ -2,15 +2,17 @@
 // https://www.electronjs.org/docs/latest/tutorial/process-model#preload-scripts
 import { contextBridge, ipcRenderer } from 'electron'
 import { DatabaseSliceInvokers } from './infrastructure/database/invokers';
-import { dbSlices } from './infrastructure/database/constants';
+import { BRIDGE_NAME, dbSlices } from './infrastructure/database/constants';
+import { onDirectorySelectedListener, registerOpenDirectoryDialogInvoker } from './infrastructure/fielSystem/getDownloadPath';
+import { DIRECTORY_PICKER } from './infrastructure/fielSystem/constants';
 
 contextBridge.exposeInMainWorld('envVars', {
   YOUTUBE_API_KEY: process.env.YOUTUBE_API_KEY
 });
 
-contextBridge.exposeInMainWorld('electron', {
-  selectDirectory: () => ipcRenderer.invoke('open-directory-dialog'),
-  onDirectorySelected: (callback: any) => ipcRenderer.on('selected-directory', callback),
+contextBridge.exposeInMainWorld(DIRECTORY_PICKER, {
+  ...registerOpenDirectoryDialogInvoker(ipcRenderer),
+  ...onDirectorySelectedListener(ipcRenderer)
 });
 
 contextBridge.exposeInMainWorld('api', {
@@ -20,14 +22,12 @@ contextBridge.exposeInMainWorld('api', {
 
 
 const databaseNames = Object.values(dbSlices);
-
 const databaseInvokers = databaseNames.reduce((acc: any, dbName: string) => {
   const invokers = new DatabaseSliceInvokers(dbName).getInvokers();
   return { ...acc, ...invokers }
 }, {});
 
-
-contextBridge.exposeInMainWorld('database', {
+contextBridge.exposeInMainWorld(BRIDGE_NAME, {
   ...databaseInvokers
 });
 

@@ -1,21 +1,25 @@
 import React, { useState, useEffect } from 'react';
+import { getDirectoryPickerApi, removeSelectDirectoryListener } from '../infrastructure/fielSystem/getDownloadPath';
+
+
+
 
 export const DirectoryPicker = () => {
   const [selectedDirectory, setSelectedDirectory] = useState('');
 
   useEffect(() => {
-    window.electron.onDirectorySelected((event: any, path: string) => {
+    getDirectoryPickerApi().onDirectorySelected((event: any, path: string) => {
       setSelectedDirectory(path);
     });
 
     return () => {
-      window.electron.removeAllListeners('selected-directory');
+      removeSelectDirectoryListener()
     };
   }, []);
 
   const handleSelectDirectory = () => {
     // Invoke the selectDirectory method exposed via preload script
-    window.electron.selectDirectory().then((path: string) => {
+    getDirectoryPickerApi().selectDirectory().then((path: string) => {
       if (path) {
         setSelectedDirectory(path);
       }
