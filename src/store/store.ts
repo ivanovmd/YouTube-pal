@@ -1,17 +1,16 @@
 import { configureStore } from '@reduxjs/toolkit'
-import { authSlice } from './auth/authSlice'
 import { youtubeApi } from './youtube/youtubeApi'
 import { playlistsMiddleware, youtubeSlice } from './youtube/youtubeSlice'
+import { rtkQueryErrorLogger } from './rtkQueryErrorHandler'
 
 
 export const store = configureStore({
   reducer: {
-    auth: authSlice.reducer,
     youtube: youtubeSlice.reducer,
     [youtubeApi.reducerPath]: youtubeApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(youtubeApi.middleware, playlistsMiddleware),
+    getDefaultMiddleware().concat(youtubeApi.middleware, playlistsMiddleware, rtkQueryErrorLogger),
   devTools: true
 })
 
@@ -19,3 +18,4 @@ export const store = configureStore({
 export type AppState = ReturnType<typeof store.getState>
 // Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
 export type AppDispatch = typeof store.dispatch
+export type AppStore = typeof store

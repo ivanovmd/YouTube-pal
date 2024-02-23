@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { AppState } from '../store';
+import { reactLocalStorage } from 'reactjs-localstorage';
 
 
 
@@ -17,11 +18,12 @@ const buildQueryParams = (params?: YouTubeQueryParams): string => {
   params = { maxResults: 50, part: ['contentDetails', 'id', 'snippet'], ...params }
   let queryString = ''
   Object.keys(params).map(param => {
-    if (params[param]) {
-      if (typeof params[param] === 'object') {
-        queryString += `${param}=${params[param].join(',')}&`
+    const values = params[param]
+    if (values) {
+      if (typeof values === 'object') {
+        queryString += `${param}=${values.join(',')}&`
       } else {
-        queryString += `${param}=${params[param]}&`
+        queryString += `${param}=${values}&`
       }
     }
   })
@@ -34,12 +36,12 @@ export const youtubeApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: 'https://youtube.googleapis.com/youtube/v3/',
     prepareHeaders: (headers, { getState }) => {
-      const state = getState() as AppState;
-      const token = state.auth.authToken;
+      //const state = getState() as AppState;
+      const authToken = reactLocalStorage.get('authToken');
 
       // If we have a token, set the Authorization header
-      if (token) {
-        headers.set('Authorization', `Bearer ${token}`);
+      if (authToken) {
+        headers.set('Authorization', `Bearer ${authToken}`);
       }
 
       return headers;
@@ -57,7 +59,7 @@ export const youtubeApi = createApi({
       query: ({ playlistId, pageToken }) => {
         const queryParams = buildQueryParams({ pageToken })
         return 'playlistItems?playlistId=' + playlistId + '&' + queryParams
-      }
+      },
     })
   }),
 });

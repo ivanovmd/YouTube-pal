@@ -5,16 +5,11 @@ import { Auth } from './auth';
 import Content from './content';
 import { Link, Outlet } from 'react-router-dom';
 import { fetchAuthToken } from '../store/auth/authSlice';
+import { useLocalStorage } from '@uidotdev/usehooks';
 
 
 const Main: React.FC = () => {
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(fetchAuthToken());
-  }, [dispatch]);
-
-  const authToken = useSelector((state: AppState) => state.auth.authToken)
+  const [authToken, setAuthToken] = useLocalStorage('authToken', null);
 
 
   return (
