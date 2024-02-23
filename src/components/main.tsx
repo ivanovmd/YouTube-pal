@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { AppState } from '../store/store';
 import { Auth } from './auth';
 import Content from './content';
+import { Link, Outlet } from 'react-router-dom';
 
 
 const Main: React.FC = () => {
@@ -16,9 +17,16 @@ const Main: React.FC = () => {
       </div>
 
       {authToken ?
-        <Content />
+        //<Content />
+        <>
+          <Link to='/' >Home</Link>
+          <Link to='/playlists' >Playlists</Link>
+        </>
         :
         <Auth />}
+
+
+      <Outlet />
     </>
   );
 };

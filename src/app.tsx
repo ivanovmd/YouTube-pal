@@ -5,15 +5,25 @@ import { Provider } from 'react-redux';
 import { store } from './store/store';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import Main from './components/main';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import Playlists from './components/playlists';
+import Playlist from './components/playlist';
 
 const App = () => {
 
   return (
-    <GoogleOAuthProvider clientId="295406963755-hpdvcfmr50u3cl5bfbb5idaakgurfj6m.apps.googleusercontent.com">
+    <GoogleOAuthProvider clientId="1039150483129-0ejpp700seo8n1n1o8oci80porl0q9ik.apps.googleusercontent.com">
       <Provider store={store}>
-        <Main />
+        <BrowserRouter>
+          <Routes>
+            <Route path='/' element={<Main />} >
+              <Route path='playlists' element={<Playlists />} />
+              <Route path='/playlists/:playlistId' element={<Playlist />} />
+            </Route>
+          </Routes>
+        </BrowserRouter>
       </Provider>
-    </GoogleOAuthProvider>
+    </GoogleOAuthProvider >
   );
 }
 
