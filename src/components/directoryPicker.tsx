@@ -1,29 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import { getDirectoryPickerApi, removeSelectDirectoryListener } from '../infrastructure/fielSystem/getDownloadPath';
-
-
+import React, { useState } from 'react';
+import { getDirectoryPickerApi } from '../infrastructure/fielSystem/getDownloadPath';
+import { SELECT_DIRECTORY } from '../infrastructure/fielSystem/constants';
 
 
 export const DirectoryPicker = () => {
   const [selectedDirectory, setSelectedDirectory] = useState('');
 
-  useEffect(() => {
-    getDirectoryPickerApi().onDirectorySelected((event: any, path: string) => {
-      setSelectedDirectory(path);
-    });
-
-    return () => {
-      removeSelectDirectoryListener()
-    };
-  }, []);
-
-  const handleSelectDirectory = () => {
+  const handleSelectDirectory = async () => {
     // Invoke the selectDirectory method exposed via preload script
-    getDirectoryPickerApi().selectDirectory().then((path: string) => {
-      if (path) {
-        setSelectedDirectory(path);
-      }
-    });
+    const path = await getDirectoryPickerApi()[SELECT_DIRECTORY]()
+    if (path) {
+      setSelectedDirectory(path);
+    }
   };
 
   return (

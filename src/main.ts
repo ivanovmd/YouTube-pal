@@ -5,6 +5,33 @@ import { dbSlices } from './infrastructure/database/constants';
 import { Databases } from './infrastructure/database/databases';
 import { DatabaseSliceHandlers } from './infrastructure/database/handlers';
 import { registerOpenDirectoryDialogHandler } from './infrastructure/fielSystem/getDownloadPath';
+import { DownloadService } from './services/downloadService';
+
+
+
+
+
+let counter = 0
+const downloadService = new DownloadService('./downloads/', {})
+ipcMain.handle('startDownload', async (event, videoId: string, onProgress) => {
+  downloadService.startDownload(videoId, 'testVideo' + counter++, console.log, console.log, console.log)
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -43,7 +70,7 @@ const createWindow = () => {
   mainWindow.webContents.openDevTools();
 
   installExtension(REDUX_DEVTOOLS)
-    .then((name) => console.log(`Added Extension:  ${name}`))
+    .then((name) => console.log(`Added Extension: ${name}`))
     .catch((err) => console.log('An error occurred: ', err));
 };
 

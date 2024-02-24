@@ -1,6 +1,5 @@
 import { BRIDGE_NAME, DatabaseOperation, databaseOperations } from "./constants";
 
-
 type Callers = {
   [key in DatabaseOperation]?: (...args: any) => Promise<any>;
 };

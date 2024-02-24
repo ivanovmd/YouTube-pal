@@ -5,7 +5,6 @@ import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { dbSlices } from "../infrastructure/database/constants";
 import { DatabaseSliceCallers } from "../infrastructure/database/callers";
-import Playlists from './playlists';
 
 const downloadPathCallers = new DatabaseSliceCallers(dbSlices.DOWNLOAD_PATH).getCallers();
 
@@ -48,7 +47,6 @@ const Content = () => {
         })}
       </ul>
 
-      <Playlists />
     </div>
   );
 };

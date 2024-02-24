@@ -1,4 +1,4 @@
-import { DIRECTORY_PICKER, INVOKER_NAME, ON_DIRECTORY_SELECTED, OPEN_DIRECTORY_DIALOG } from "./constants";
+import { DIRECTORY_PICKER, SELECT_DIRECTORY, OPEN_DIRECTORY_DIALOG } from "./constants";
 
 
 export const registerOpenDirectoryDialogHandler = (ipcMain: any, dialog: any) => {
@@ -15,18 +15,13 @@ export const registerOpenDirectoryDialogHandler = (ipcMain: any, dialog: any) =>
 }
 
 export const registerOpenDirectoryDialogInvoker = (ipcRenderer: any) => {
-  return { [INVOKER_NAME]: () => ipcRenderer.invoke(OPEN_DIRECTORY_DIALOG) }
-}
-
-export const onDirectorySelectedListener = (ipcRenderer: any) => {
-  return {
-    [ON_DIRECTORY_SELECTED]: (callback: any) => ipcRenderer.on(ON_DIRECTORY_SELECTED, callback),
-  }
+  return { [SELECT_DIRECTORY]: () => ipcRenderer.invoke(OPEN_DIRECTORY_DIALOG) }
 }
 
 
 export const getDirectoryPickerApi = () => window[DIRECTORY_PICKER as any] as any
 
 export const removeSelectDirectoryListener = () => {
-  return getDirectoryPickerApi().removeAllListeners(INVOKER_NAME)
+  return getDirectoryPickerApi().removeAllListeners(SELECT_DIRECTORY)
 }
+
