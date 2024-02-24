@@ -11,19 +11,6 @@ import { DownloadService } from './services/downloadService';
 
 
 
-let counter = 0
-const downloadService = new DownloadService('./downloads/', {})
-ipcMain.handle('startDownload', async (event, videoId: string, onProgress) => {
-  downloadService.startDownload(videoId, 'testVideo' + counter++, console.log, console.log, console.log)
-});
-
-
-
-
-
-
-
-
 
 
 
@@ -58,6 +45,20 @@ const createWindow = () => {
       contextIsolation: true, // This should be true to use contextBridge
     },
   });
+
+  console.log(mainWindow);
+
+  let counter = 0
+  const downloadService = new DownloadService('./downloads/', {})
+  ipcMain.handle('startDownload', async (event, videoId: string) => {
+    const onProgress = (...args) => mainWindow.webContents.send('downloadProgress', args)
+    downloadService.startDownload(videoId, 'testVideo' + counter++, console.log, console.log, onProgress)
+  });
+
+
+
+
+
 
   // and load the index.html of the app.
   if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {

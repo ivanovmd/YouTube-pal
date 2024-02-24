@@ -34,7 +34,10 @@ export class DownloadService {
         const percent = downloaded / total;
         const downloadedMinutes = (Date.now() - start) / 1000 / 60;
         const estimatedDownloadTime = (downloadedMinutes / percent) - downloadedMinutes;
-        onProgress(estimatedDownloadTime, percent)
+
+        console.log(onProgress);
+
+        onProgress(videoId, estimatedDownloadTime, percent)
       })
       .on('end', () => {
         console.log(`\ndone, thanks - ${(Date.now() - start) / 1000}s`);

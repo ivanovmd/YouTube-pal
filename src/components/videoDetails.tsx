@@ -2,6 +2,13 @@ import React, { useEffect } from 'react';
 
 export const Video = ({ videoDetails }) => {
 
+
+  useEffect(() => {
+    window['fileDownload'].onDownloadProgress((val) => {
+      console.log(val)
+    })
+  }, [])
+
   const startDownload = () => {
     window['fileDownload'].startDownload(videoDetails.resourceId.videoId)
   }
