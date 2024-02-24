@@ -6,8 +6,8 @@ import { store } from './store/store';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import Main from './components/main';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import Playlists from './components/playlists';
-import Playlist from './components/playlist';
+import PlaylistView from './views/playlistView';
+import PlaylistsView from './views/playlistsView';
 
 const App = () => {
   return (
@@ -16,8 +16,8 @@ const App = () => {
         <BrowserRouter>
           <Routes>
             <Route path='/' element={<Main />} >
-              <Route path='playlists' element={<Playlists />} />
-              <Route path='/playlists/:playlistId' element={<Playlist />} />
+              <Route path='playlists' element={<PlaylistsView />} />
+              <Route path='/playlists/:playlistId' element={<PlaylistView />} />
             </Route>
           </Routes>
         </BrowserRouter>
