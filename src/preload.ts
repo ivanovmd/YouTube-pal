@@ -27,6 +27,6 @@ contextBridge.exposeInMainWorld(BRIDGE_NAME, {
 
 contextBridge.exposeInMainWorld('fileDownload', {
   'startDownload': (...args: any) => ipcRenderer.invoke('startDownload', ...args),
-  'onDownloadProgress': (callback: any) => ipcRenderer.on('downloadProgress', (_event, value) => callback(value)),
+  'onDownloadProgress': (callback: any) => ipcRenderer.on('downloadProgress', (_, value) => callback(value)),
 })
 

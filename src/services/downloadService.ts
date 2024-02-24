@@ -17,14 +17,19 @@ export class DownloadService {
     return await ytdl.getInfo(videoId);
   }
 
-  startDownload(videoId: string, videoName: string, onFinish?: any, onError?: any, onProgress?: any) {
+  async startDownload(videoId: string, videoName: string, onFinish?: any, onError?: any, onProgress?: any) {
     const url = 'http://www.youtube.com/watch?v=' + videoId
-    const fileLocation = this.downloadLocation + videoName + '.mp3'
+    const fileLocation = this.downloadLocation + videoName + '.mp4'
 
     const start = Date.now();
 
+    const info = await ytdl.getInfo(url)
+    const format = ytdl.chooseFormat(info.formats, { quality: 'lowest' });
 
-    const stream = ytdl(url, { quality: 'highestaudio' })
+
+    const stream = ytdl(url, {
+      format
+    })
 
     stream
       .pipe(fs.createWriteStream(fileLocation));
@@ -34,8 +39,6 @@ export class DownloadService {
         const percent = downloaded / total;
         const downloadedMinutes = (Date.now() - start) / 1000 / 60;
         const estimatedDownloadTime = (downloadedMinutes / percent) - downloadedMinutes;
-
-        console.log(onProgress);
 
         onProgress(videoId, estimatedDownloadTime, percent)
       })
