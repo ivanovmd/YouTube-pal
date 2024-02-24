@@ -17,7 +17,7 @@ export const databaseOperations: DatabaseOperations = [
 
 export const dbSlices = {
   'DOWNLOAD_PATH': 'download-path',
-  'AUTH_TOKEN': 'auth-token'
+  'PLAYLISTS_WATCHLIST': 'playlists-watchlist'
 }
 
 export const BRIDGE_NAME = 'database'
