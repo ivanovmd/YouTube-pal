@@ -1,16 +1,20 @@
 import React, { useEffect } from 'react';
+import { ViewSliceCommunicator } from '../communicators/base/viewSliceCommunicator';
+import { fileDownloadApi } from '../communicators/videoDownloader/common';
+
+
+const fileDownloadCommunicator = new ViewSliceCommunicator(fileDownloadApi, window);
+
 
 export const Video = ({ videoDetails }) => {
-
-
   useEffect(() => {
-    window['fileDownload'].onDownloadProgress((val) => {
-      console.log(val)
+    fileDownloadCommunicator.on.downloadProgress((...args) => {
+      console.log(args)
     })
   }, [])
 
   const startDownload = () => {
-    window['fileDownload'].startDownload(videoDetails.resourceId.videoId)
+    fileDownloadCommunicator.call.downloadStart('./downloads/', 'rL6r7AdAYUU', 'testVideo', {})
   }
 
   return (

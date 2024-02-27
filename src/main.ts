@@ -6,6 +6,11 @@ import { Databases } from './infrastructure/database/databases';
 import { DatabaseSliceHandlers } from './infrastructure/database/handlers';
 import { registerOpenDirectoryDialogHandler } from './infrastructure/fielSystem/getDownloadPath';
 import { DownloadService } from './services/downloadService';
+import { caller as videoDownloadCaller } from './communicators/videoDownloader/main/callers';
+import { handler as videoDownloadHandler } from './communicators/videoDownloader/main/handlers';
+import { VideoDownloadEventNames, fileDownloadApi, videoDownloadApi } from './communicators/videoDownloader/common';
+import { MainSliceCommunicator } from './communicators/base/mainSliceCommunicator';
+import { fileDownloadHandlers } from './communicators/videoDownloader/handlers';
 
 
 
@@ -46,14 +51,28 @@ const createWindow = () => {
     },
   });
 
-  console.log(mainWindow);
 
-  let counter = 0
-  const downloadService = new DownloadService('./downloads/', {})
-  ipcMain.handle('startDownload', async (event, videoId: string) => {
-    const onProgress = (...args) => mainWindow.webContents.send('downloadProgress', args)
-    downloadService.startDownload(videoId, 'testVideo' + counter++, console.log, console.log, onProgress)
-  });
+  new MainSliceCommunicator(fileDownloadApi, {
+    mainWindow,
+    ipcMain
+  }, fileDownloadHandlers)
+
+  //let counter = 0;
+  //const downloadService = new DownloadService('./downloads/', {})
+
+  //const videoDownloadApiCommunicator = new MainSliceCommunicator(videoDownloadApi, mainWindow, ipcMain)
+  //videoDownloadApiCommunicator.on('downloadStart', (event, videoId: string) => {
+  //  console.log('here');
+
+  //  const onProgress = (...args) => videoDownloadApiCommunicator.call('downloadProgress', args)
+  //  downloadService.startDownload(videoId, 'testVideo' + counter++, console.log, console.log, onProgress)
+  //})
+
+  //const downloadService = new DownloadService('./downloads/', {})
+  //ipcMain.handle('startDownload', async (event, videoId: string) => {
+  //  const onProgress = (...args) => mainWindow.webContents.send('downloadProgress', args)
+  //  downloadService.startDownload(videoId, 'testVideo' + counter++, console.log, console.log, onProgress)
+  //});
 
 
 

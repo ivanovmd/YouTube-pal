@@ -1,6 +1,5 @@
 import ytdl from 'ytdl-core'
 import fs from 'fs'
-import ffmpeg from 'fluent-ffmpeg'
 
 export class DownloadService {
   downloadLocation: string
@@ -40,18 +39,18 @@ export class DownloadService {
         const downloadedMinutes = (Date.now() - start) / 1000 / 60;
         const estimatedDownloadTime = (downloadedMinutes / percent) - downloadedMinutes;
 
-        onProgress(videoId, estimatedDownloadTime, percent)
+        onProgress && onProgress(videoId, estimatedDownloadTime, percent)
       })
       .on('end', () => {
         console.log(`\ndone, thanks - ${(Date.now() - start) / 1000}s`);
       });
 
     stream.on('finish', () => {
-      onFinish(videoId)
+      onFinish && onFinish(videoId)
     })
 
     stream.on('error', (e) => {
-      onError(videoId, e)
+      onError && onError(videoId, e)
     })
 
   }

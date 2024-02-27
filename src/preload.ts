@@ -5,7 +5,10 @@ import { DatabaseSliceInvokers } from './infrastructure/database/invokers';
 import { BRIDGE_NAME, dbSlices } from './infrastructure/database/constants';
 import { registerOpenDirectoryDialogInvoker } from './infrastructure/fielSystem/getDownloadPath';
 import { DIRECTORY_PICKER } from './infrastructure/fielSystem/constants';
-import { ipcRenderer } from 'electron';
+import { fileDownloadApi } from './communicators/videoDownloader/common';
+import { PreloadSliceCommunicator } from './communicators/base/preloadSliceCommunicator';
+import { fileDownloadHandlers } from './communicators/videoDownloader/handlers';
+
 
 contextBridge.exposeInMainWorld('envVars', {
   YOUTUBE_API_KEY: process.env.YOUTUBE_API_KEY
@@ -25,8 +28,14 @@ contextBridge.exposeInMainWorld(BRIDGE_NAME, {
   ...databaseInvokers
 });
 
-contextBridge.exposeInMainWorld('fileDownload', {
-  'startDownload': (...args: any) => ipcRenderer.invoke('startDownload', ...args),
-  'onDownloadProgress': (callback: any) => ipcRenderer.on('downloadProgress', (_, value) => callback(value)),
+console.log('I am here');
+
+new PreloadSliceCommunicator(fileDownloadApi, {
+  contextBridge,
+  ipcRenderer
 })
 
+//contextBridge.exposeInMainWorld('fileDownload', {
+//  'startDownload': (...args: any) => ipcRenderer.invoke('startDownload', ...args),
+//  'onDownloadProgress': (callback: any) => ipcRenderer.on('downloadProgress', (_, value) => callback(value)),
+//})

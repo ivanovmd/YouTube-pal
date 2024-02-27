@@ -3,7 +3,18 @@ import { useGetPlaylistsQuery } from '../store/youtube/youtubeApi';
 import Playlist from '../components/playlist';
 import { Link } from 'react-router-dom';
 
-const PlaylistsView = ({ pageToken }) => {
+
+interface PlaylistsViewProps {
+  pageToken?: string
+}
+
+/**
+ * React functional component for displaying playlists.
+ *
+ * @param {PlaylistsViewProps} pageToken - The page token for fetching playlists.
+ * @return {JSX.Element} The component for displaying playlists.
+ */
+const PlaylistsView: React.FC<PlaylistsViewProps> = ({ pageToken }) => {
   const { data: playlists, error, isLoading } = useGetPlaylistsQuery({ pageToken });
 
   useEffect(() => {

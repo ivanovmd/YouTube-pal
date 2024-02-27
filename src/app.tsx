@@ -8,6 +8,10 @@ import Main from './components/main';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import PlaylistView from './views/playlistView';
 import PlaylistsView from './views/playlistsView';
+import { HomeView } from './views/homeView';
+import { Auth } from './components/auth';
+import { AuthView } from './views/authView';
+import { DownloadVideoView } from './views/downloadVideoView';
 
 const App = () => {
   return (
@@ -16,9 +20,12 @@ const App = () => {
         <BrowserRouter>
           <Routes>
             <Route path='/' element={<Main />} >
-              <Route path='playlists' element={<PlaylistsView />} />
+              <Route path='/playlists' element={<PlaylistsView />} />
               <Route path='/playlists/:playlistId' element={<PlaylistView />} />
             </Route>
+            {/*<Route path='/download-video' element={<DownloadVideoView />} />
+            <Route path='/login' element={<AuthView />} />
+            <Route path='*' element={<p>Not found</p>} />*/}
           </Routes>
         </BrowserRouter>
       </Provider>
