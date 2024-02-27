@@ -9,8 +9,9 @@ const fileDownloadCommunicator = new ViewSliceCommunicator(fileDownloadApi, wind
 export const Video = ({ videoDetails }) => {
   const [downloadedPercent, setDownloadedPercent] = useState(0);
   useEffect(() => {
-    fileDownloadCommunicator.on.downloadProgress((args) => {
-      const [videoId, estimatedDownloadTime, percent] = args
+    fileDownloadCommunicator.on.downloadProgress((videoId, estimatedDownloadTime, percent) => {
+      console.log(videoId, estimatedDownloadTime, percent);
+
 
       setDownloadedPercent(percent)
     })

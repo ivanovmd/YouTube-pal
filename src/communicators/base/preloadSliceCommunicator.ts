@@ -18,7 +18,7 @@ export class PreloadSliceCommunicator {
 
     const handlersObj = commands.reduce((acc: any, command: string) => {
       const commandName = formatEventName(namespace, command)
-      acc[commandName] = (callback: any) => context.ipcRenderer.on(commandName, (event, value) => callback(value))
+      acc[commandName] = (callback: any) => context.ipcRenderer.on(commandName, (event, ...args) => callback(...args))
       return acc
     }, {})
 
