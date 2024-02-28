@@ -1,8 +1,15 @@
-import React, { useEffect } from 'react';
-import { useGetPlaylistsQuery } from '../store/youtube/youtubeApi';
-import Playlist from '../components/playlist';
-import { Link } from 'react-router-dom';
+import React from 'react';
+import { Button } from '@mui/material';
+
 
 export const AuthView = () => {
-  return <p>Please Login</p>
+  return (
+    <>
+
+      <Button variant='contained'>
+        Log In With Google
+      </Button>
+
+    </>
+  )
 }

@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { dbSlices } from "../infrastructure/database/constants";
 import { DatabaseSliceCallers } from "../infrastructure/database/callers";
+import { Link } from 'react-router-dom';
 
 const downloadPathCallers = new DatabaseSliceCallers(dbSlices.DOWNLOAD_PATH).getCallers();
 
@@ -35,6 +36,8 @@ const Content = () => {
 
   return (
     <div>
+      <Content />
+
       <DirectoryPicker />
 
       <YouTubeVideoForm />

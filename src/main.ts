@@ -5,23 +5,9 @@ import { dbSlices } from './infrastructure/database/constants';
 import { Databases } from './infrastructure/database/databases';
 import { DatabaseSliceHandlers } from './infrastructure/database/handlers';
 import { registerOpenDirectoryDialogHandler } from './infrastructure/fielSystem/getDownloadPath';
-import { DownloadService } from './services/downloadService';
-import { caller as videoDownloadCaller } from './communicators/videoDownloader/main/callers';
-import { handler as videoDownloadHandler } from './communicators/videoDownloader/main/handlers';
-import { VideoDownloadEventNames, fileDownloadApi, videoDownloadApi } from './communicators/videoDownloader/common';
+import { fileDownloadApi } from './communicators/videoDownloader/common';
 import { MainSliceCommunicator } from './communicators/base/mainSliceCommunicator';
 import { fileDownloadHandlers } from './communicators/videoDownloader/handlers';
-
-
-
-
-
-
-
-
-
-
-
 
 
 
