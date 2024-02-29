@@ -1,9 +1,8 @@
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import Videos from '../components/videos';
-import { Box, Container, Stack, Typography } from '@mui/material';
-import { IconButton } from '@mui/joy';
-import DownloadIcon from '@mui/icons-material/Download';
+import { Box, Container, IconButton, Stack, Typography } from '@mui/joy';
+import FileDownload from '@mui/icons-material/FileDownload';
+
 
 const PlaylistView = () => {
   const { playlistId } = useParams();
@@ -29,9 +28,9 @@ const PlaylistView = () => {
                   overflow: 'hidden',
                   whiteSpace: 'nowrap'
                 }}
-                  variant="h6">Lorem ipsum dolor sit amet consectetur adipisicing elit.</Typography>
+                >Lorem ipsum dolor sit amet consectetur adipisicing elit.</Typography>
                 <IconButton aria-label="delete" size="sm">
-                  <DownloadIcon fontSize="inherit" />
+                  <FileDownload fontSize='small' />
                 </IconButton>
                 {/*<Button loading variant="soft">Download</Button>*/}
               </Stack>

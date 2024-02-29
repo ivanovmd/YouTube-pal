@@ -2,10 +2,9 @@ import React, { useEffect } from 'react';
 import { useGetPlaylistsQuery } from '../store/youtube/youtubeApi';
 import Playlist from '../components/playlist';
 import { Link } from 'react-router-dom';
-import { Box, Container, Paper, Stack, Typography } from '@mui/material';
-import DownloadIcon from '@mui/icons-material/Download';
 import Button from '@mui/joy/Button';
 import IconButton from '@mui/joy/IconButton';
+import { Box, Container, Stack, Typography } from '@mui/joy';
 
 interface PlaylistsViewProps {
   pageToken?: string
@@ -48,16 +47,17 @@ const PlaylistsView: React.FC<PlaylistsViewProps> = ({ pageToken }) => {
                   overflow: 'hidden',
                   whiteSpace: 'nowrap'
                 }}
-                  variant="h6">Lorem ipsum dolor sit amet consectetur adipisicing elit.</Typography>
+                >Lorem ipsum dolor sit amet consectetur adipisicing elit.</Typography>
                 <IconButton aria-label="delete" size="sm">
-                  <DownloadIcon fontSize="inherit" />
+                  {/*<DownloadIcon fontSize="inherit" />*/}
+                  hi
                 </IconButton>
                 {/*<Button loading variant="soft">Download</Button>*/}
               </Stack>
             </Box>
           ))}
         </Box>
-      </Container>
+      </Container >
     </>
   )
 };

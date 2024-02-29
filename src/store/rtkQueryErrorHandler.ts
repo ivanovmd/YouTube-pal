@@ -1,8 +1,9 @@
 import { isRejectedWithValue } from '@reduxjs/toolkit'
 import type { Middleware } from '@reduxjs/toolkit'
-import { removeAuthToken } from './auth/authSlice'
+
 import { AppStore } from './store'
 import { reactLocalStorage } from 'reactjs-localstorage'
+import localStorageProxy from '../services/localStorageService'
 
 export const rtkQueryErrorLogger: Middleware =
   (store: AppStore) => (next) => (action) => {
@@ -10,8 +11,7 @@ export const rtkQueryErrorLogger: Middleware =
     if (isRejectedWithValue(action)) {
       if (action.payload.status === 401) {
         console.log('Unautorized')
-        //store.dispatch(removeAuthToken())
-        reactLocalStorage.set('authToken', null);
+        localStorageProxy.removeItem('authToken');
       }
     }
 

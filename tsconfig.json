@@ -12,7 +12,10 @@
     "outDir": "dist",
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "typeRoots": ["./node_modules/@types", "./src/types"]
+    "typeRoots": ["./node_modules/@types", "./src/types"],
+    "paths": {
+      "@mui/material": ["./node_modules/@mui/joy"]
+    }
   },
   "include": ["src"]
 }

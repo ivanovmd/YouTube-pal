@@ -15,6 +15,7 @@ import { DownloadVideoView } from './views/downloadVideoView';
 import Content from './components/content';
 import { Auth } from './components/auth';
 import { UrlDownloadView } from './views/urlDownloadView';
+import '@fontsource/inter';
 
 const App = () => {
   return (
@@ -26,7 +27,7 @@ const App = () => {
             <button>Settings</button>
           </div>*/}
           <Routes>
-            <Route path='/' element={<PlaylistView />} />
+            <Route path='/' element={<Main />} />
             <Route path='/playlists' element={<PlaylistsView />} />
             <Route path='/playlists/:playlistId' element={<PlaylistView />} />
             <Route path='/download-video' element={<DownloadVideoView />} />

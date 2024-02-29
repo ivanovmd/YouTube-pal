@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useGoogleLogin } from '@react-oauth/google';
-import { useLocalStorage } from "@uidotdev/usehooks";
+import useLocalStorage from "../hooks/useLocalStorage";
+
 
 
 export const Auth = () => {
