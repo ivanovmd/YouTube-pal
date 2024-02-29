@@ -2,7 +2,6 @@ import { isRejectedWithValue } from '@reduxjs/toolkit'
 import type { Middleware } from '@reduxjs/toolkit'
 
 import { AppStore } from './store'
-import { reactLocalStorage } from 'reactjs-localstorage'
 import localStorageProxy from '../services/localStorageService'
 
 export const rtkQueryErrorLogger: Middleware =

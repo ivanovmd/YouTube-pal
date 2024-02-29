@@ -43,27 +43,6 @@ const createWindow = () => {
     ipcMain
   }, fileDownloadHandlers)
 
-  //let counter = 0;
-  //const downloadService = new DownloadService('./downloads/', {})
-
-  //const videoDownloadApiCommunicator = new MainSliceCommunicator(videoDownloadApi, mainWindow, ipcMain)
-  //videoDownloadApiCommunicator.on('downloadStart', (event, videoId: string) => {
-  //  console.log('here');
-
-  //  const onProgress = (...args) => videoDownloadApiCommunicator.call('downloadProgress', args)
-  //  downloadService.startDownload(videoId, 'testVideo' + counter++, console.log, console.log, onProgress)
-  //})
-
-  //const downloadService = new DownloadService('./downloads/', {})
-  //ipcMain.handle('startDownload', async (event, videoId: string) => {
-  //  const onProgress = (...args) => mainWindow.webContents.send('downloadProgress', args)
-  //  downloadService.startDownload(videoId, 'testVideo' + counter++, console.log, console.log, onProgress)
-  //});
-
-
-
-
-
 
   // and load the index.html of the app.
   if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {

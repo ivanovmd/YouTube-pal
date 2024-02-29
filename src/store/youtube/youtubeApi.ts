@@ -1,8 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { AppState } from '../store';
-import { reactLocalStorage } from 'reactjs-localstorage';
-
-
+import localStorageProxy from '../../services/localStorageService';
 
 
 type part = 'contentDetails' | 'id' | 'localizations' | 'player' | 'snippet' | 'status'
@@ -37,7 +34,7 @@ export const youtubeApi = createApi({
     baseUrl: 'https://youtube.googleapis.com/youtube/v3/',
     prepareHeaders: (headers, { getState }) => {
       //const state = getState() as AppState;
-      const authToken = reactLocalStorage.get('authToken');
+      const authToken = localStorageProxy.getItem('authToken');
 
       // If we have a token, set the Authorization header
       if (authToken) {

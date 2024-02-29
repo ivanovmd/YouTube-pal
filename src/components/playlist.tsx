@@ -3,11 +3,18 @@ import { Link, useParams } from 'react-router-dom';
 import Videos from './videos';
 import { DatabaseSliceCallers } from '../infrastructure/database/callers';
 import { dbSlices } from '../infrastructure/database/constants';
+import { Box, IconButton, Stack, Tooltip, Typography } from '@mui/joy';
+import { FileDownload } from '@mui/icons-material';
 
 const playlistsWatchlistCallers = new DatabaseSliceCallers(dbSlices.PLAYLISTS_WATCHLIST).getCallers();
 
 const Playlist = ({ playlist }) => {
   const [isWatched, setIsWatched] = useState(false)
+
+
+  useEffect(() => {
+    console.log(playlist);
+  }, [playlist])
 
   useEffect(() => {
     playlistsWatchlistCallers.findOne({ id: playlist.id }).then(response => {
@@ -35,21 +42,30 @@ const Playlist = ({ playlist }) => {
     }
   }
 
-  return <div key={playlist.id}>
-    <img src={playlist?.snippet?.thumbnails?.high?.url} alt={playlist?.snippet?.title} />
-    <Link to={playlist.id}>
-      <h3>{playlist?.snippet?.title}</h3>
+  return <div title={playlist.snippet.title}>
+    <Link to={`/playlists/${playlist.id}`}>
+      <Box padding={2} sx={{ maxWidth: '300px' }}>
+        <img style={{ maxWidth: '100%', borderRadius: '10px' }} src={playlist.snippet.thumbnails.high.url} alt="{playlist.snippet.title}" width={300} height={225} />
+
+        <Stack direction="row" alignItems="center" spacing={1}>
+
+          <Typography sx={{
+            width: '100%',
+            textOverflow: 'ellipsis',
+            overflow: 'hidden',
+            whiteSpace: 'nowrap'
+          }}
+          ><span>{playlist.snippet.title}</span></Typography>
+
+          <IconButton aria-label="delete" size="sm">
+            <FileDownload fontSize="inherit" />
+          </IconButton>
+          {/*<Button loading variant="soft">Download</Button>*/}
+        </Stack>
+      </Box>
     </Link>
-
-    {isWatched}
-
-    <button onClick={toggleAddWToWatchlist}>{isWatched ? 'Remove From Download Watchlist' : 'Add To Download Watchlist'}</button>
-
-    <br />
-    <br />
-    <br />
-    <br />
   </div>
+
 
 };
 

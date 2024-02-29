@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useGoogleLogin } from '@react-oauth/google';
 import useLocalStorage from "../hooks/useLocalStorage";
+import { Button } from "@mui/joy";
 
 
 
@@ -15,8 +16,8 @@ export const Auth = () => {
   });
 
   return (
-    <div>
-      <button onClick={() => login()}>Login</button>
-    </div>
+    <Button onClick={() => login()}>
+      Log In With Google
+    </Button>
   );
 }

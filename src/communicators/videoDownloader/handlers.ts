@@ -4,6 +4,8 @@ import { DOWNLOAD_PROGRESS, DOWNLOAD_START, fileDownloadApi } from "./common"
 
 export const fileDownloadHandlers: ICommunicatorApihandlers = {
   [DOWNLOAD_START]: (event, downloadDestination, videoId, videoName, downloadOptions = {}, context) => {
+    console.log(DOWNLOAD_START);
+
     const downloadProgress = formatEventName(fileDownloadApi.namespace, DOWNLOAD_PROGRESS)
     const downloadService = new DownloadService(downloadDestination, downloadOptions)
     const onProgress = (...args: any) => context.mainWindow.webContents.send(downloadProgress, ...args)

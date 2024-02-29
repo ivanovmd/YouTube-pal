@@ -12,8 +12,6 @@ export class ViewSliceCommunicator {
 
     api.commands.forEach(handler => {
       const eventName = formatEventName(api.namespace, handler)
-      console.log(eventName);
-
       this.on[handler] = (...args: any) => window[api.namespace][eventName](...args)
     })
   }
