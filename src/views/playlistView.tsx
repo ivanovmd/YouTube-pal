@@ -8,7 +8,11 @@ import Videos from '../components/videos';
 const PlaylistView = () => {
   const { playlistId } = useParams();
 
-  return <Videos playlistId={playlistId} />
+  return <Container sx={{ height: '100%', display: 'flex', flexWrap: 'wrap' }}>
+
+    <Videos playlistId={playlistId} />
+
+  </Container>
 };
 
 export default PlaylistView;

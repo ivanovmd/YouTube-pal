@@ -8,6 +8,7 @@ import { DIRECTORY_PICKER } from './infrastructure/fielSystem/constants';
 import { fileDownloadApi } from './communicators/videoDownloader/common';
 import { PreloadSliceCommunicator } from './communicators/base/preloadSliceCommunicator';
 import { fileDownloadHandlers } from './communicators/videoDownloader/handlers';
+import { openExternalApi } from './communicators/openExternal/common';
 
 
 contextBridge.exposeInMainWorld('envVars', {
@@ -31,6 +32,11 @@ contextBridge.exposeInMainWorld(BRIDGE_NAME, {
 console.log('I am here');
 
 new PreloadSliceCommunicator(fileDownloadApi, {
+  contextBridge,
+  ipcRenderer
+})
+
+new PreloadSliceCommunicator(openExternalApi, {
   contextBridge,
   ipcRenderer
 })

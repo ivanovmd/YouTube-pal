@@ -1,4 +1,4 @@
-import { app, BrowserWindow, dialog, ipcMain } from 'electron';
+import { app, BrowserWindow, dialog, ipcMain, shell } from 'electron';
 import installExtension, { REDUX_DEVTOOLS } from 'electron-devtools-installer';
 import path from 'path';
 import { dbSlices } from './infrastructure/database/constants';
@@ -8,6 +8,10 @@ import { registerOpenDirectoryDialogHandler } from './infrastructure/fielSystem/
 import { fileDownloadApi } from './communicators/videoDownloader/common';
 import { MainSliceCommunicator } from './communicators/base/mainSliceCommunicator';
 import { fileDownloadHandlers } from './communicators/videoDownloader/handlers';
+import { openExternalHandlers } from './communicators/openExternal/handlers';
+import { openExternalApi } from './communicators/openExternal/common';
+
+
 
 
 
@@ -42,6 +46,11 @@ const createWindow = () => {
     mainWindow,
     ipcMain
   }, fileDownloadHandlers)
+
+  new MainSliceCommunicator(openExternalApi, {
+    mainWindow,
+    ipcMain
+  }, openExternalHandlers)
 
 
   // and load the index.html of the app.

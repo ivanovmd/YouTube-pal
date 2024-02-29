@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { ViewSliceCommunicator } from '../communicators/base/viewSliceCommunicator';
 import { fileDownloadApi } from '../communicators/videoDownloader/common';
-import { Box, IconButton, Stack, Typography } from '@mui/joy';
+import { Box, Button, IconButton, Stack, Typography } from '@mui/joy';
 import { FileDownload } from '@mui/icons-material';
+import { openExternalApi } from '../communicators/openExternal/common';
 
 
 const fileDownloadCommunicator = new ViewSliceCommunicator(fileDownloadApi, window);
+const openExternalCommunicator = new ViewSliceCommunicator(openExternalApi, window);
 
 export const Video = ({ videoDetails }) => {
   const [downloadedPercent, setDownloadedPercent] = useState(0);
@@ -54,6 +56,8 @@ export const Video = ({ videoDetails }) => {
         <IconButton aria-label="delete" size="sm" onClick={() => startDownload()} loading={isDownloading}>
           <FileDownload fontSize="inherit" />
         </IconButton>
+
+        <Button onClick={() => openExternalCommunicator.call.openExternal('https://www.youtube.com/watch?v=' + videoDetails.resourceId.videoId)}>Open</Button>
       </Stack>
     </Box>
   );

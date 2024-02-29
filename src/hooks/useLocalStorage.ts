@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import localStorageProxy from '../services/localStorageService';
 
-const useLocalStorage = (key, initialValue) => {
+const useLocalStorage = (key: string, initialValue: any) => {
   const [value, setValue] = useState(() => localStorageProxy.getItem(key) || initialValue);
 
   useEffect(() => {

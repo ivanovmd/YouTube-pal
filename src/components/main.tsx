@@ -3,6 +3,7 @@ import { Auth } from './auth';
 import { Outlet, useNavigate } from 'react-router-dom';
 import useLocalStorage from '../hooks/useLocalStorage';
 import localStorageProxy from '../services/localStorageService';
+import { DownloadQueue } from './downloadQueue';
 
 
 
@@ -18,6 +19,7 @@ export const Main: React.FC = () => {
 
   return (
     <>
+      <DownloadQueue />
       <Outlet />
     </>
   );

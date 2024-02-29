@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react';
-import { Video } from './videoDetails';
+import { Video } from './video';
 import { useGetPlaylistItemsQuery, youtubeApi } from '../store/youtube/youtubeApi';
 import { useParams } from 'react-router-dom';
 import { store } from '../store/store';
+
 
 const Videos = ({ playlistId, pageToken }) => {
   const { data: videosResponse, error, isLoading } = useGetPlaylistItemsQuery({ playlistId, pageToken });
