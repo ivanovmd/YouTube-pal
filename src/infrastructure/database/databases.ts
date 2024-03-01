@@ -15,6 +15,9 @@ export class Databases {
 
   createDb = (dbname: string) => {
     const dbPath = path.join(app.getPath('userData'), dbname + '.db');
+
+    console.log(dbPath);
+
     return Datastore.create({
       filename: dbPath,
       autoload: true,

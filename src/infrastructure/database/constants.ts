@@ -20,6 +20,7 @@ export const dbSlices = {
   'PLAYLISTS_WATCHLIST': 'playlists-watchlist',
   'DOWNLOAD_QUEUE': 'download-queue',
   'DOWNLOAD_HISTORY': 'download-history',
+  'APP_SETTINGS': 'app-settings'
 }
 
 export const BRIDGE_NAME = 'database'

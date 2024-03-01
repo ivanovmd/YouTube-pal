@@ -12,9 +12,9 @@ const Playlist = ({ playlist }) => {
   const [isWatched, setIsWatched] = useState(false)
 
 
-  useEffect(() => {
-    console.log(playlist);
-  }, [playlist])
+  //useEffect(() => {
+  //  console.log(playlist);
+  //}, [playlist])
 
   useEffect(() => {
     playlistsWatchlistCallers.findOne({ id: playlist.id }).then(response => {
@@ -45,7 +45,7 @@ const Playlist = ({ playlist }) => {
   return <div title={playlist.snippet.title}>
     <Link to={`/playlists/${playlist.id}`}>
       <Box padding={2} sx={{ maxWidth: '300px' }}>
-        <img style={{ maxWidth: '100%', borderRadius: '10px' }} src={playlist.snippet.thumbnails.high.url} alt="{playlist.snippet.title}" width={300} height={225} />
+        <img style={{ maxWidth: '100%', borderRadius: '10px' }} src={playlist.snippet.thumbnails.high.url} alt={playlist.snippet.title} width={300} height={225} />
 
         <Stack direction="row" alignItems="center" spacing={1}>
 

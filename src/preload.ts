@@ -29,7 +29,6 @@ contextBridge.exposeInMainWorld(BRIDGE_NAME, {
   ...databaseInvokers
 });
 
-console.log('I am here');
 
 new PreloadSliceCommunicator(fileDownloadApi, {
   contextBridge,
@@ -40,8 +39,3 @@ new PreloadSliceCommunicator(openExternalApi, {
   contextBridge,
   ipcRenderer
 })
-
-//contextBridge.exposeInMainWorld('fileDownload', {
-//  'startDownload': (...args: any) => ipcRenderer.invoke('startDownload', ...args),
-//  'onDownloadProgress': (callback: any) => ipcRenderer.on('downloadProgress', (_, value) => callback(value)),
-//})

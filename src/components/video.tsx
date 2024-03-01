@@ -41,7 +41,7 @@ export const Video = ({ videoDetails }) => {
   return (
 
     <Box padding={2} sx={{ maxWidth: '300px' }}>
-      <img style={{ maxWidth: '100%', borderRadius: '10px' }} src={videoDetails?.thumbnails?.high?.url} alt="{playlist.snippet.title}" width={300} height={225} />
+      <img style={{ maxWidth: '100%', borderRadius: '10px' }} src={videoDetails?.thumbnails?.high?.url} alt={videoDetails?.title} width={300} height={225} />
 
       <Stack direction="row" alignItems="center" spacing={1}>
 

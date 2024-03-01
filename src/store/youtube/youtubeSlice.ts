@@ -32,13 +32,13 @@ export const youtubeSlice = createSlice({
 });
 
 
-export const playlistsMiddleware: any = (store: Store) => (next: any) => (action: any) => {
-  // Adjust the action type check according to your actual implementation
-  next(action);
-  if (action.type === 'auth/setAuthToken') {
-    // Dispatch the `getPlaylists` endpoint call using the RTK Query API
-    store.dispatch(youtubeApi.endpoints.getPlaylists.initiate({}) as any);
-  }
+//export const playlistsMiddleware: any = (store: Store) => (next: any) => (action: any) => {
+//  // Adjust the action type check according to your actual implementation
+//  next(action);
+//  if (action.type === 'auth/setAuthToken') {
+//    // Dispatch the `getPlaylists` endpoint call using the RTK Query API
+//    store.dispatch(youtubeApi.endpoints.getPlaylists.initiate({}) as any);
+//  }
 
-  return next(action);
-};
+//  return next(action);
+//};

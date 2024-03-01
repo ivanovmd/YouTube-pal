@@ -1,16 +1,18 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { youtubeApi } from './youtube/youtubeApi'
-import { playlistsMiddleware, youtubeSlice } from './youtube/youtubeSlice'
+import { youtubeSlice } from './youtube/youtubeSlice'
 import { rtkQueryErrorLogger } from './rtkQueryErrorHandler'
+import { appSettingsApi } from './appSettings/appSettingsSlice'
+import { useDispatch } from 'react-redux'
 
 
 export const store = configureStore({
   reducer: {
-    youtube: youtubeSlice.reducer,
     [youtubeApi.reducerPath]: youtubeApi.reducer,
+    [appSettingsApi.reducerPath]: appSettingsApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(youtubeApi.middleware, playlistsMiddleware, rtkQueryErrorLogger),
+    getDefaultMiddleware().concat(youtubeApi.middleware, appSettingsApi.middleware, rtkQueryErrorLogger),
   devTools: true
 })
 
@@ -19,3 +21,5 @@ export type AppState = ReturnType<typeof store.getState>
 // Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
 export type AppDispatch = typeof store.dispatch
 export type AppStore = typeof store
+
+export const useAppDispatch: () => AppDispatch = useDispatch
