@@ -2,8 +2,8 @@ import { ICommunicatorApi, formatEventName } from "./common"
 
 
 export class ViewSliceCommunicator {
-  call: { [key: string]: (...args: any) => void } = {}
-  on: { [key: string]: (...args: any) => void } = {}
+  call: { [key: string]: (...args: any) => any } = {}
+  on: { [key: string]: (...args: any) => any } = {}
   constructor(api: ICommunicatorApi, window: Window) {
     api.handlers.forEach((command: any) => {
       const eventName = formatEventName(api.namespace, command)

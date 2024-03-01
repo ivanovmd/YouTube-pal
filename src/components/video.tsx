@@ -4,6 +4,7 @@ import { fileDownloadApi } from '../communicators/videoDownloader/common';
 import { Box, Button, IconButton, Stack, Typography } from '@mui/joy';
 import { FileDownload } from '@mui/icons-material';
 import { openExternalApi } from '../communicators/openExternal/common';
+import { useGetSettingsQuery } from '../store/appSettings/appSettingsSlice';
 
 
 const fileDownloadCommunicator = new ViewSliceCommunicator(fileDownloadApi, window);
@@ -12,6 +13,7 @@ const openExternalCommunicator = new ViewSliceCommunicator(openExternalApi, wind
 export const Video = ({ videoDetails }) => {
   const [downloadedPercent, setDownloadedPercent] = useState(0);
   const [isDownloading, setIsDownloading] = useState(false);
+  const { data: appSettings, error, isLoading } = useGetSettingsQuery({})
 
 
   useEffect(() => {
@@ -34,7 +36,8 @@ export const Video = ({ videoDetails }) => {
   }, [])
 
   const startDownload = () => {
-    fileDownloadCommunicator.call.downloadStart('./downloads/', videoDetails.resourceId.videoId, videoDetails.title, {})
+    const downloadPath = appSettings?.downloadPath + '/' || './downloads / '
+    fileDownloadCommunicator.call.downloadStart(downloadPath, videoDetails.resourceId.videoId, videoDetails.title, {})
     setIsDownloading(true)
   }
 

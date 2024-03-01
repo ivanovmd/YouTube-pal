@@ -3,21 +3,17 @@
 import { contextBridge, ipcRenderer } from 'electron'
 import { DatabaseSliceInvokers } from './infrastructure/database/invokers';
 import { BRIDGE_NAME, dbSlices } from './infrastructure/database/constants';
-import { registerOpenDirectoryDialogInvoker } from './infrastructure/fielSystem/getDownloadPath';
-import { DIRECTORY_PICKER } from './infrastructure/fielSystem/constants';
 import { fileDownloadApi } from './communicators/videoDownloader/common';
 import { PreloadSliceCommunicator } from './communicators/base/preloadSliceCommunicator';
 import { fileDownloadHandlers } from './communicators/videoDownloader/handlers';
 import { openExternalApi } from './communicators/openExternal/common';
+import { selectDirectoryApi } from './communicators/selectDirectory/common';
 
 
 contextBridge.exposeInMainWorld('envVars', {
   YOUTUBE_API_KEY: process.env.YOUTUBE_API_KEY
 });
 
-contextBridge.exposeInMainWorld(DIRECTORY_PICKER, {
-  ...registerOpenDirectoryDialogInvoker(ipcRenderer),
-});
 
 const databaseNames = Object.values(dbSlices);
 const databaseInvokers = databaseNames.reduce((acc: any, dbName: string) => {
@@ -36,6 +32,11 @@ new PreloadSliceCommunicator(fileDownloadApi, {
 })
 
 new PreloadSliceCommunicator(openExternalApi, {
+  contextBridge,
+  ipcRenderer
+})
+
+new PreloadSliceCommunicator(selectDirectoryApi, {
   contextBridge,
   ipcRenderer
 })

@@ -4,14 +4,13 @@ import path from 'path';
 import { dbSlices } from './infrastructure/database/constants';
 import { Databases } from './infrastructure/database/databases';
 import { DatabaseSliceHandlers } from './infrastructure/database/handlers';
-import { registerOpenDirectoryDialogHandler } from './infrastructure/fielSystem/getDownloadPath';
 import { fileDownloadApi } from './communicators/videoDownloader/common';
 import { MainSliceCommunicator } from './communicators/base/mainSliceCommunicator';
 import { fileDownloadHandlers } from './communicators/videoDownloader/handlers';
 import { openExternalHandlers } from './communicators/openExternal/handlers';
 import { openExternalApi } from './communicators/openExternal/common';
-
-
+import { selectDirectoryApi } from './communicators/selectDirectory/common';
+import { selectDirectorylHandlers } from './communicators/selectDirectory/handlers';
 
 
 
@@ -28,7 +27,7 @@ Object.keys(databases).forEach((dbName: string) => {
   new DatabaseSliceHandlers(dbName, db);
 })
 
-registerOpenDirectoryDialogHandler(ipcMain, dialog);
+
 
 const createWindow = () => {
   // Create the browser window.
@@ -51,6 +50,11 @@ const createWindow = () => {
     mainWindow,
     ipcMain
   }, openExternalHandlers)
+
+  new MainSliceCommunicator(selectDirectoryApi, {
+    mainWindow,
+    ipcMain
+  }, selectDirectorylHandlers)
 
 
   // and load the index.html of the app.

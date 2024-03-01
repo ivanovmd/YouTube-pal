@@ -42,7 +42,7 @@ export class DownloadService {
         onProgress && onProgress(videoId, estimatedDownloadTime, percent)
       })
       .on('end', () => {
-        console.log(`\ndone, thanks - ${(Date.now() - start) / 1000}s`);
+        console.log(`\ndone, thanks - ${(Date.now() - start) / 1000}s fileLocation: ${fileLocation}`);
       });
 
     stream.on('finish', () => {
