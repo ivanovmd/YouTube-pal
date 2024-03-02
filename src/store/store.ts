@@ -4,15 +4,21 @@ import { youtubeSlice } from './youtube/youtubeSlice'
 import { rtkQueryErrorLogger } from './rtkQueryErrorHandler'
 import { appSettingsApi } from './appSettings/appSettingsSlice'
 import { useDispatch } from 'react-redux'
+import { videosApi } from './videos/videosSlice'
 
 
 export const store = configureStore({
   reducer: {
     [youtubeApi.reducerPath]: youtubeApi.reducer,
     [appSettingsApi.reducerPath]: appSettingsApi.reducer,
+    [videosApi.reducerPath]: videosApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(youtubeApi.middleware, appSettingsApi.middleware, rtkQueryErrorLogger),
+    getDefaultMiddleware().concat(
+      youtubeApi.middleware,
+      appSettingsApi.middleware,
+      videosApi.middleware,
+      rtkQueryErrorLogger),
   devTools: true
 })
 

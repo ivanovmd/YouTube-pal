@@ -18,8 +18,7 @@ export const databaseOperations: DatabaseOperations = [
 export const dbSlices = {
   'DOWNLOAD_PATH': 'download-path',
   'PLAYLISTS_WATCHLIST': 'playlists-watchlist',
-  'DOWNLOAD_QUEUE': 'download-queue',
-  'DOWNLOAD_HISTORY': 'download-history',
+  'VIDEOS': 'videos',
   'APP_SETTINGS': 'app-settings'
 }
 

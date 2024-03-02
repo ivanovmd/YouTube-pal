@@ -33,4 +33,7 @@ export const appSettingsApi = createApi({
   }),
 });
 
-export const { endpoints: { setSettings }, useGetSettingsQuery, useSetSettingsMutation } = appSettingsApi;
+export const {
+  endpoints: {
+    setSettings
+  }, useGetSettingsQuery, useSetSettingsMutation } = appSettingsApi;

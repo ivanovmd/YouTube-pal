@@ -24,6 +24,7 @@ const databases = new Databases(databaseNames).getDatabases();
 
 Object.keys(databases).forEach((dbName: string) => {
   const db = databases[dbName];
+  db.ensureIndex({ fieldName: 'id', unique: true });
   new DatabaseSliceHandlers(dbName, db);
 })
 

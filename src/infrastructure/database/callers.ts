@@ -14,7 +14,7 @@ export class DatabaseSliceCallers {
   }
 
   caller(operationName: string) {
-    return (...args: any) => window[BRIDGE_NAME][operationName](...args)
+    return async (...args: any) => await window[BRIDGE_NAME][operationName](...args)
   }
 
   getCallers() {
