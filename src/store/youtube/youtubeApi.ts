@@ -29,7 +29,7 @@ const buildQueryParams = (params?: YouTubeQueryParams): string => {
 
 // Define an API service
 export const youtubeApi = createApi({
-  reducerPath: 'youtubeApi',
+  reducerPath: 'youtube',
   baseQuery: fetchBaseQuery({
     baseUrl: 'https://youtube.googleapis.com/youtube/v3/',
     prepareHeaders: (headers, { getState }) => {

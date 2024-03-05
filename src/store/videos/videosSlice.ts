@@ -25,20 +25,19 @@ export const videosApi = createApi({
   baseQuery,
   tagTypes: ['video'],
   endpoints: (builder) => ({
-    addVideoForDownload: builder.query({
-      providesTags: ['video'],
-      queryFn: async (video: VideoData) => {
-        return await videosCallers.insert(video)
-      },
-    }),
     getVideos: builder.query({
-      providesTags: ['video'],
+      providesTags: (result) =>
+        result
+          ? [
+            ...result.map(({ id }) => ({ type: 'video' as const, id })),
+            { type: 'video', id: 'LIST' },
+          ]
+          : [{ type: 'video', id: 'LIST' }],
       queryFn: async () => {
-        console.log('fetching videos');
-
         const videos = await videosCallers.find({})
         return { data: videos }
       },
+      transformResponse: null as never
     }),
     getVideo: builder.query({
       providesTags: (_, error, id) => {
@@ -50,6 +49,12 @@ export const videosApi = createApi({
       queryFn: async (id: string) => {
         const response = await videosCallers.findOne({ id })
         return { data: response?.video }
+      },
+    }),
+    addVideoForDownload: builder.mutation({
+      invalidatesTags: ['video'],
+      queryFn: async (video: VideoData) => {
+        return await videosCallers.insert(video)
       },
     }),
     updateVideoStatus: builder.mutation({
@@ -66,6 +71,11 @@ export const videosApi = createApi({
   }),
 });
 
+
+
+
+
+
 export const {
   endpoints: {
     getVideos,
@@ -75,5 +85,6 @@ export const {
   },
   useGetVideosQuery,
   useGetVideoQuery,
-  useUpdateVideoStatusMutation
+  useUpdateVideoStatusMutation,
+  useAddVideoForDownloadMutation
 } = videosApi;

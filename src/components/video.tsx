@@ -5,7 +5,7 @@ import { Box, Button, IconButton, Stack, Typography } from '@mui/joy';
 import { FileDownload } from '@mui/icons-material';
 import { openExternalApi } from '../communicators/openExternal/common';
 import { useGetSettingsQuery } from '../store/appSettings/appSettingsSlice';
-import { addVideoForDownload, useGetVideosQuery, VideoData } from '../store/videos/videosSlice';
+import { addVideoForDownload, useAddVideoForDownloadMutation, useGetVideosQuery, VideoData } from '../store/videos/videosSlice';
 import { useAppDispatch } from '../store/store';
 
 
@@ -13,16 +13,10 @@ const fileDownloadCommunicator = new ViewSliceCommunicator(fileDownloadApi, wind
 const openExternalCommunicator = new ViewSliceCommunicator(openExternalApi, window);
 
 export const Video = ({ videoDetails }) => {
-  const dispatch = useAppDispatch()
   const [downloadedPercent, setDownloadedPercent] = useState(0);
   const [isDownloading, setIsDownloading] = useState(false);
   const { data: appSettings, error, isLoading } = useGetSettingsQuery({})
-  const { data: videosData } = useGetVideosQuery({})
-
-
-  useEffect(() => {
-    console.log(videosData);
-  }, [videosData])
+  const [addVideoForDownload] = useAddVideoForDownloadMutation()
 
   useEffect(() => {
     fileDownloadCommunicator.on.downloadProgress((videoId, estimatedDownloadTime, percent) => {
@@ -52,7 +46,7 @@ export const Video = ({ videoDetails }) => {
       downloadPath: appSettings?.downloadPath || './downloads',
       status: 'queued'
     }
-    dispatch(addVideoForDownload.initiate(videoData))
+    addVideoForDownload(videoData)
   }
 
   return (
@@ -71,15 +65,14 @@ export const Video = ({ videoDetails }) => {
         ><span>{videoDetails?.title}</span></Typography>
 
         <IconButton aria-label="delete" size="sm"
-          //onClick={() => startDownload()}
           onClick={() => addTotTheQueue()}
           loading={isDownloading}>
           <FileDownload fontSize="inherit" />
         </IconButton>
 
         <Button
-          //onClick={() => openExternalCommunicator.call.openExternal('https://www.youtube.com/watch?v=' + videoDetails.resourceId.videoId)}
-          onClick={() => addTotTheQueue()}
+          onClick={() => openExternalCommunicator.call.openExternal('https://www.youtube.com/watch?v=' + videoDetails.resourceId.videoId)}
+        //onClick={() => addTotTheQueue()}
         >Open</Button>
       </Stack>
     </Box>

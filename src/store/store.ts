@@ -14,7 +14,12 @@ export const store = configureStore({
     [videosApi.reducerPath]: videosApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoreState: true,
+        ignoreActions: true
+      },
+    }).concat(
       youtubeApi.middleware,
       appSettingsApi.middleware,
       videosApi.middleware,

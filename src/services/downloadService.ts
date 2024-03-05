@@ -4,7 +4,7 @@ import fs from 'fs'
 export class DownloadService {
   downloadLocation: string
   downloadSettings: any
-
+  currentDownloadVideoId: string | null = null
   options = {}
 
   constructor(downloadLocation: string, downloadSettings: any) {
@@ -17,6 +17,14 @@ export class DownloadService {
   }
 
   async startDownload(videoId: string, videoName: string, onFinish?: any, onError?: any, onProgress?: any) {
+    // do not allow more than one download
+    if (this.currentDownloadVideoId) {
+      onError && onError(videoId, 'Already downloading');
+      return;
+    }
+
+    this.currentDownloadVideoId = videoId
+
     const url = 'http://www.youtube.com/watch?v=' + videoId
     const fileLocation = this.downloadLocation + videoName + '.mp4'
 
@@ -47,10 +55,12 @@ export class DownloadService {
 
     stream.on('finish', () => {
       onFinish && onFinish(videoId)
+      this.currentDownloadVideoId = null
     })
 
     stream.on('error', (e) => {
       onError && onError(videoId, e)
+      this.currentDownloadVideoId = null
     })
 
   }

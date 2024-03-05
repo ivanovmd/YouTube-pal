@@ -29,7 +29,6 @@ Object.keys(databases).forEach((dbName: string) => {
 })
 
 
-
 const createWindow = () => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
@@ -40,7 +39,6 @@ const createWindow = () => {
       contextIsolation: true, // This should be true to use contextBridge
     },
   });
-
 
   new MainSliceCommunicator(fileDownloadApi, {
     mainWindow,
