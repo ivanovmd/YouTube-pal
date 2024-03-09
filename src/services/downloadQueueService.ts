@@ -1,24 +1,14 @@
+import { BaseSingleton } from "../shared/singleton";
 
-
-export class DownloadQueueService {
+export class DownloadQueueService extends BaseSingleton {
   currentDownloadingVideoId: string
   videoIdsInQueue: string[]
 
-  private static instance: DownloadQueueService;
-
   constructor() {
+    super()
     this.currentDownloadingVideoId = '';
     this.videoIdsInQueue = [];
   }
-
-  public static getInstance(): DownloadQueueService {
-    if (!DownloadQueueService.instance) {
-      DownloadQueueService.instance = new DownloadQueueService();
-    }
-    return DownloadQueueService.instance;
-  }
-
-
 
   onVideoDownloadStarted = (videoId: string) => {
     console.log('onVideoDownloadStarted', videoId)

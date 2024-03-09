@@ -3300,6 +3300,11 @@ adjust-sourcemap-loader@^4.0.0:
     loader-utils "^2.0.0"
     regex-parser "^2.2.11"
 
+advanced-throttle-debounce@^1.0.9:
+  version "1.0.9"
+  resolved "https://registry.npmjs.org/advanced-throttle-debounce/-/advanced-throttle-debounce-1.0.9.tgz"
+  integrity sha512-Imx/yDZtDfDCn7CaY5lmDC9LL3vy0hC8ppkc0BeZ7zrn1Kufz0gpqe6kTYHCUobTSEPbYxQpEYTaMDtB4+OlyA==
+
 agent-base@^6.0.2, agent-base@6:
   version "6.0.2"
   resolved "https://registry.npmjs.org/agent-base/-/agent-base-6.0.2.tgz"

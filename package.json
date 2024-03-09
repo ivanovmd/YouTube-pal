@@ -52,6 +52,7 @@
     "@mui/material": "^5.15.11",
     "@react-oauth/google": "^0.12.1",
     "@reduxjs/toolkit": "^2.1.0",
+    "advanced-throttle-debounce": "^1.0.9",
     "ajv": "^8.12.0",
     "axios": "^1.6.7",
     "electron-squirrel-startup": "^1.0.0",

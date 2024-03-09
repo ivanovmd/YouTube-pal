@@ -5,7 +5,7 @@ import { Box, Button, IconButton, Stack, Typography } from '@mui/joy';
 import { FileDownload } from '@mui/icons-material';
 import { openExternalApi } from '../communicators/openExternal/common';
 import { useGetSettingsQuery } from '../store/appSettings/appSettingsSlice';
-import { addVideoForDownload, useAddVideoForDownloadMutation, useGetVideosQuery, VideoData } from '../store/videos/videosSlice';
+import { useAddVideoForDownloadMutation, useUpdateVideoStatusMutation, VideoData } from '../store/videos/videosSlice';
 import { useAppDispatch } from '../store/store';
 
 
@@ -13,14 +13,15 @@ const fileDownloadCommunicator = new ViewSliceCommunicator(fileDownloadApi, wind
 const openExternalCommunicator = new ViewSliceCommunicator(openExternalApi, window);
 
 export const Video = ({ videoDetails }) => {
-  const [downloadedPercent, setDownloadedPercent] = useState(0);
   const [isDownloading, setIsDownloading] = useState(false);
-  const { data: appSettings, error, isLoading } = useGetSettingsQuery({})
+  const { downloadPath } = useGetSettingsQuery({}, {
+    selectFromResult: (result) => result.data
+  })
+  const [updateVideoStatus] = useUpdateVideoStatusMutation()
   const [addVideoForDownload] = useAddVideoForDownloadMutation()
 
   useEffect(() => {
     fileDownloadCommunicator.on.downloadProgress((videoId, estimatedDownloadTime, percent) => {
-      setDownloadedPercent(percent)
       if (percent === 1) {
         setIsDownloading(false)
       }
@@ -33,17 +34,16 @@ export const Video = ({ videoDetails }) => {
   }, [])
 
   const startDownload = () => {
-    const downloadPath = appSettings?.downloadPath + '/' || './downloads / '
-    fileDownloadCommunicator.call.downloadStart(downloadPath, videoDetails.resourceId.videoId, videoDetails.title, {})
+    fileDownloadCommunicator.call.downloadStart(downloadPath || './downloads', videoDetails.resourceId.videoId, videoDetails.title, {})
     setIsDownloading(true)
   }
 
-  const addTotTheQueue = () => {
+  const addToTheQueue = () => {
     const videoData: VideoData = {
       id: videoDetails.resourceId.videoId,
       name: videoDetails.title,
       url: 'https://www.youtube.com/watch?v=' + videoDetails.resourceId.videoId,
-      downloadPath: appSettings?.downloadPath || './downloads',
+      downloadPath: downloadPath || './downloads',
       status: 'queued'
     }
     addVideoForDownload(videoData)
@@ -52,6 +52,8 @@ export const Video = ({ videoDetails }) => {
   return (
 
     <Box padding={2} sx={{ maxWidth: '300px' }}>
+      <p>{downloadPath}</p>
+
       <img style={{ maxWidth: '100%', borderRadius: '10px' }} src={videoDetails?.thumbnails?.high?.url} alt={videoDetails?.title} width={300} height={225} />
 
       <Stack direction="row" alignItems="center" spacing={1}>
@@ -65,15 +67,20 @@ export const Video = ({ videoDetails }) => {
         ><span>{videoDetails?.title}</span></Typography>
 
         <IconButton aria-label="delete" size="sm"
-          onClick={() => addTotTheQueue()}
+          onClick={() => addToTheQueue()}
+          //onClick={() => openExternalCommunicator.call.openExternal('https://www.youtube.com/watch?v=' + videoDetails.resourceId.videoId)}
           loading={isDownloading}>
           <FileDownload fontSize="inherit" />
         </IconButton>
 
-        <Button
+        {/*<Button
           onClick={() => openExternalCommunicator.call.openExternal('https://www.youtube.com/watch?v=' + videoDetails.resourceId.videoId)}
-        //onClick={() => addTotTheQueue()}
-        >Open</Button>
+        //onClick={() => addToTheQueue()}
+        >Open</Button>*/}
+
+        <Button
+          onClick={() => updateVideoStatus({ id: videoDetails.resourceId.videoId, status: 'downloading' })}
+        >U</Button>
       </Stack>
     </Box>
   );

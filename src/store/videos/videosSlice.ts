@@ -35,9 +35,10 @@ export const videosApi = createApi({
           : [{ type: 'video', id: 'LIST' }],
       queryFn: async () => {
         const videos = await videosCallers.find({})
+        console.log(videos);
+
         return { data: videos }
       },
-      transformResponse: null as never
     }),
     getVideo: builder.query({
       providesTags: (_, error, id) => {
@@ -64,27 +65,18 @@ export const videosApi = createApi({
         }
         return [{ type: 'video', id }];
       },
-      queryFn: (status: VideoStatus, id) => {
-        return videosCallers.update({ id }, status)
+      queryFn: async ({ status, id }) => {
+        const response = await videosCallers.update({ id }, { $set: { status } })
+        return response
       },
     }),
   }),
 });
 
 
-
-
-
-
 export const {
-  endpoints: {
-    getVideos,
-    getVideo,
-    addVideoForDownload,
-    updateVideoStatus
-  },
   useGetVideosQuery,
   useGetVideoQuery,
-  useUpdateVideoStatusMutation,
-  useAddVideoForDownloadMutation
+  useAddVideoForDownloadMutation,
+  useUpdateVideoStatusMutation
 } = videosApi;

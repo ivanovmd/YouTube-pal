@@ -1,15 +1,28 @@
 import ytdl from 'ytdl-core'
 import fs from 'fs'
+import { debounce } from 'advanced-throttle-debounce';
+import { BaseSingleton } from '../shared/singleton'
 
-export class DownloadService {
+
+
+export class DownloadService extends BaseSingleton {
   downloadLocation: string
   downloadSettings: any
   currentDownloadVideoId: string | null = null
   options = {}
 
-  constructor(downloadLocation: string, downloadSettings: any) {
+  private constructor(downloadLocation: string, downloadSettings: any) {
+    super();
     this.downloadLocation = downloadLocation;
     this.downloadSettings = downloadSettings;
+  }
+
+  public static getInstance(downloadLocation?: string, downloadSettings?: any): DownloadService {
+    return super.getInstance(downloadLocation, downloadSettings) as DownloadService;
+  }
+
+  public getCurrentDownloadVideoId() {
+    return this.currentDownloadVideoId
   }
 
   async getVideoInfo(videoId: string) {
@@ -46,8 +59,10 @@ export class DownloadService {
         const percent = downloaded / total;
         const downloadedMinutes = (Date.now() - start) / 1000 / 60;
         const estimatedDownloadTime = (downloadedMinutes / percent) - downloadedMinutes;
-
-        onProgress && onProgress(videoId, estimatedDownloadTime, percent)
+        if (onProgress) {
+          //onProgress = debounce(onProgress, { wait: 100, maxWait: 300, leading: true, trailing: true });
+          onProgress(videoId, estimatedDownloadTime, percent)
+        }
       })
       .on('end', () => {
         console.log(`\ndone, thanks - ${(Date.now() - start) / 1000}s fileLocation: ${fileLocation}`);
