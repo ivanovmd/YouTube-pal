@@ -35,8 +35,6 @@ export const videosApi = createApi({
           : [{ type: 'video', id: 'LIST' }],
       queryFn: async () => {
         const videos = await videosCallers.find({})
-        console.log(videos);
-
         return { data: videos }
       },
     }),

@@ -1,8 +1,7 @@
 import ytdl from 'ytdl-core'
 import fs from 'fs'
-import { debounce } from 'advanced-throttle-debounce';
 import { BaseSingleton } from '../shared/singleton'
-
+import { ERROR_CODES } from '../shared/errorCodes';
 
 
 export class DownloadService extends BaseSingleton {
@@ -10,11 +9,20 @@ export class DownloadService extends BaseSingleton {
   downloadSettings: any
   currentDownloadVideoId: string | null = null
   options = {}
+  currentStream: any = null
 
   private constructor(downloadLocation: string, downloadSettings: any) {
     super();
     this.downloadLocation = downloadLocation;
     this.downloadSettings = downloadSettings;
+  }
+
+
+  public cancelDownload() {
+    if (this.currentStream) {
+      this.currentStream.destroy();
+      this.currentStream = null;
+    }
   }
 
   public static getInstance(downloadLocation?: string, downloadSettings?: any): DownloadService {
@@ -32,7 +40,7 @@ export class DownloadService extends BaseSingleton {
   async startDownload(videoId: string, videoName: string, onFinish?: any, onError?: any, onProgress?: any) {
     // do not allow more than one download
     if (this.currentDownloadVideoId) {
-      onError && onError(videoId, 'Already downloading');
+      onError && onError(videoId, ERROR_CODES.DOWNLOAD_IN_PROGRESS);
       return;
     }
 
@@ -50,6 +58,8 @@ export class DownloadService extends BaseSingleton {
     const stream = ytdl(url, {
       format
     })
+
+    this.currentStream = stream
 
     stream
       .pipe(fs.createWriteStream(fileLocation));
@@ -71,11 +81,13 @@ export class DownloadService extends BaseSingleton {
     stream.on('finish', () => {
       onFinish && onFinish(videoId)
       this.currentDownloadVideoId = null
+      this.currentStream = null
     })
 
     stream.on('error', (e) => {
       onError && onError(videoId, e)
       this.currentDownloadVideoId = null
+      this.currentStream = null
     })
 
   }

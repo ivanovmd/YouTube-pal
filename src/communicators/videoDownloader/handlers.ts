@@ -1,6 +1,6 @@
 import { DownloadService } from "../../services/downloadService"
 import { ICommunicatorApihandlers, formatEventName } from "../base/common"
-import { CURRENT_DOWNLOAD_VIDEO_ID, DOWNLOAD_ERROR, DOWNLOAD_FINISH, DOWNLOAD_PROGRESS, DOWNLOAD_START, fileDownloadApi } from "./common"
+import { CURRENT_DOWNLOAD_VIDEO_ID, DOWNLOAD_CANCEL, DOWNLOAD_ERROR, DOWNLOAD_FINISH, DOWNLOAD_PROGRESS, DOWNLOAD_START, fileDownloadApi } from "./common"
 
 export const fileDownloadHandlers: ICommunicatorApihandlers = {
   [DOWNLOAD_START]: (event, downloadDestination, videoId, videoName, downloadOptions = {}, context) => {
@@ -16,8 +16,11 @@ export const fileDownloadHandlers: ICommunicatorApihandlers = {
   },
   [CURRENT_DOWNLOAD_VIDEO_ID]: (event, context) => {
     const downloadService = DownloadService.getInstance()
-    console.log('downloadService', downloadService);
     return downloadService.getCurrentDownloadVideoId()
+  },
+  [DOWNLOAD_CANCEL]: (event, context) => {
+    const downloadService = DownloadService.getInstance()
+    downloadService.cancelDownload()
   }
 }
 

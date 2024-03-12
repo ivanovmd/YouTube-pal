@@ -32,7 +32,6 @@ export class MainSliceCommunicator {
   // can also send commands back to renderer
   registerHandler(namespace: string, handlerName: string, handler: (...args: any) => any, context: IMainCommunicatorContext) {
     const eventName = formatEventName(namespace, handlerName)
-    console.log(eventName);
     context.ipcMain.handle(eventName, (...args) => handler(...args, context))
   }
 }

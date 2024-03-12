@@ -20,19 +20,6 @@ export const Video = ({ videoDetails }) => {
   const [updateVideoStatus] = useUpdateVideoStatusMutation()
   const [addVideoForDownload] = useAddVideoForDownloadMutation()
 
-  useEffect(() => {
-    fileDownloadCommunicator.on.downloadProgress((videoId, estimatedDownloadTime, percent) => {
-      if (percent === 1) {
-        setIsDownloading(false)
-      }
-    })
-
-    fileDownloadCommunicator.on.downloadError((videoId, error) => {
-      console.log(error)
-      setIsDownloading(false)
-    })
-  }, [])
-
   const startDownload = () => {
     fileDownloadCommunicator.call.downloadStart(downloadPath || './downloads', videoDetails.resourceId.videoId, videoDetails.title, {})
     setIsDownloading(true)
@@ -52,8 +39,6 @@ export const Video = ({ videoDetails }) => {
   return (
 
     <Box padding={2} sx={{ maxWidth: '300px' }}>
-      <p>{downloadPath}</p>
-
       <img style={{ maxWidth: '100%', borderRadius: '10px' }} src={videoDetails?.thumbnails?.high?.url} alt={videoDetails?.title} width={300} height={225} />
 
       <Stack direction="row" alignItems="center" spacing={1}>
@@ -78,9 +63,9 @@ export const Video = ({ videoDetails }) => {
         //onClick={() => addToTheQueue()}
         >Open</Button>*/}
 
-        <Button
+        {/*<Button
           onClick={() => updateVideoStatus({ id: videoDetails.resourceId.videoId, status: 'downloading' })}
-        >U</Button>
+        >U</Button>*/}
       </Stack>
     </Box>
   );

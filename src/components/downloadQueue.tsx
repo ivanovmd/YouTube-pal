@@ -8,70 +8,76 @@ import { VideoData, useGetVideosQuery, useUpdateVideoStatusMutation } from "../s
 import { fileDownloadApi } from "../communicators/videoDownloader/common";
 const selectDirectoryCommunicator = new ViewSliceCommunicator(selectDirectoryApi, window);
 import { debounce } from 'advanced-throttle-debounce';
+import { ERROR_CODES } from "../shared/errorCodes";
 
 const fileDownloadCommunicator = new ViewSliceCommunicator(fileDownloadApi, window);
 
-
-
 export const DownloadQueue = () => {
-  const [downloadProgress, setDownloadProgress] = useState({})
+  const [downloadProgress, setDownloadProgress] = useState(null)
   const [setSettings] = useSetSettingsMutation()
   const [updateVideoStatus] = useUpdateVideoStatusMutation()
   const { data: appSettings } = useGetSettingsQuery({})
-  const { queuedVideos } = useGetVideosQuery({}, {
+  const { queuedVideos, videoInDownloadStatus } = useGetVideosQuery({}, {
     selectFromResult: ({ data }) => {
       if (data) {
         // Replace the condition with your filtering logic
-        const queuedVideos = data.filter((video: VideoData) => video.status === 'queued');
-        return { queuedVideos }
+        const queuedVideos = data.filter((video: VideoData) => 'queued' === video.status);
+        const videoInDownloadStatus = data.find((video: VideoData) => 'downloading' === video.status);
+        return { queuedVideos, videoInDownloadStatus }
       }
       return { queuedVideos: [] };
     },
   })
 
-  const startDownload = (videoId: string, videoTitle: string, downloadPath: string) => {
-    downloadPath = downloadPath + '/' || './downloads / '
-    fileDownloadCommunicator.call.downloadStart(downloadPath, videoId, videoTitle, {})
-    updateVideoStatus('downloading', videoId)
+  const startDownload = async (videoId: string, videoTitle: string, downloadPath: string) => {
+    downloadPath = downloadPath + '/' || './downloads'
+    await fileDownloadCommunicator.call.downloadStart(downloadPath, videoId, videoTitle, {})
+    await updateVideoStatus({ id: videoId, status: 'downloading' })
   }
 
   useEffect(() => {
     fileDownloadCommunicator.on.downloadProgress((videoId, estimatedDownloadTime, percent) => {
+      console.log('progress', videoId);
       setDownloadProgress({
         videoId,
         estimatedDownloadTime,
         percent
       })
-      console.log(percent * 100)
     })
 
-    fileDownloadCommunicator.on.downloadError((videoId, error) => {
-      setDownloadProgress({})
-      updateVideoStatus({ id: videoId, status: 'failed' })
+    fileDownloadCommunicator.on.downloadError(async (videoId, error) => {
+      console.log(error, videoId)
+      if (error !== ERROR_CODES.DOWNLOAD_IN_PROGRESS) {
+        setDownloadProgress(null)
+        await updateVideoStatus({ id: videoId, status: 'failed' })
+      }
     })
 
-    fileDownloadCommunicator.on.downloadFinish((videoId) => {
-      setDownloadProgress({})
-      updateVideoStatus({ id: videoId, status: 'downloaded' })
+    fileDownloadCommunicator.on.downloadFinish(async (videoId) => {
+      setDownloadProgress(null)
+      await updateVideoStatus({ id: videoId, status: 'downloaded' })
     })
 
 
 
   }, [])
 
-  //useEffect(() => {
-  //  if (appSettings) {
-  //    console.log(appSettings);
-
-  //  }
-  //}, [appSettings])
-
   useEffect(() => {
-    // check if there are videos in the queue
-    // if there are, check if there are anything downloading at the moment
-    console.log(queuedVideos);
 
-  }, [queuedVideos])
+    if (!downloadProgress) {
+      if (videoInDownloadStatus) {
+        fileDownloadCommunicator.call.currentDownloadVideoId().then((videoId: string) => {
+          if (videoInDownloadStatus.id !== videoId) {
+            startDownload(videoInDownloadStatus.id, videoInDownloadStatus.name, appSettings?.downloadPath)
+          }
+        })
+      } else if (queuedVideos.length) {
+        startDownload(queuedVideos[0].id, queuedVideos[0].name, appSettings?.downloadPath)
+      }
+    }
+
+  }, [queuedVideos, videoInDownloadStatus])
+
 
 
   const handleSelectDirectory = async () => {
@@ -83,7 +89,9 @@ export const DownloadQueue = () => {
   };
 
   return <div>
-    <Button onClick={() => handleSelectDirectory()}>Select Destination Folder</Button>
+    <Button onClick={async () => await handleSelectDirectory()}>Select Destination Folder</Button>
+
+    <Button onClick={() => fileDownloadCommunicator.call.downloadCancel()}>Stop</Button>
     {queuedVideos && <p>Download Queue: {queuedVideos.length}</p>}
 
     <LinearProgress determinate value={downloadProgress?.percent * 100 || 0} />

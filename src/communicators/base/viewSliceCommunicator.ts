@@ -7,12 +7,12 @@ export class ViewSliceCommunicator {
   constructor(api: ICommunicatorApi, window: Window) {
     api.handlers.forEach((command: any) => {
       const eventName = formatEventName(api.namespace, command)
-      this.call[command] = (...args: any) => window[api.namespace][eventName](...args)
+      this.call[command] = async (...args: any) => await window[api.namespace][eventName](...args)
     })
 
     api.commands.forEach(handler => {
       const eventName = formatEventName(api.namespace, handler)
-      this.on[handler] = (...args: any) => window[api.namespace][eventName](...args)
+      this.on[handler] = async (...args: any) => await window[api.namespace][eventName](...args)
     })
   }
 }
