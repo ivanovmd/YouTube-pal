@@ -6,6 +6,7 @@ import localStorageProxy from '../services/localStorageService';
 import { DownloadQueue } from './downloadQueue';
 import { useGetSettingsQuery } from '../store/appSettings/appSettingsSlice';
 import { useAppDispatch } from '../store/store';
+import { AnotherQueue } from './anotherQueue';
 
 
 
@@ -23,7 +24,7 @@ export const Main: React.FC = () => {
 
   return (
     <>
-      <DownloadQueue />
+      <AnotherQueue />
       <Outlet />
     </>
   );

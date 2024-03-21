@@ -31,13 +31,20 @@ export const DownloadQueue = () => {
 
   const startDownload = async (videoId: string, videoTitle: string, downloadPath: string) => {
     downloadPath = downloadPath + '/' || './downloads'
-    await fileDownloadCommunicator.call.downloadStart(downloadPath, videoId, videoTitle, {})
-    await updateVideoStatus({ id: videoId, status: 'downloading' })
+    const downloadingVideoId = await fileDownloadCommunicator.call.downloadStart(downloadPath, videoId, videoTitle, {})
+    if (downloadingVideoId) {
+      await updateVideoStatus({ id: videoId, status: 'downloading' })
+      setDownloadProgress({
+        videoId,
+        estimatedDownloadTime: 0,
+        percent: 0
+      })
+    }
   }
+
 
   useEffect(() => {
     fileDownloadCommunicator.on.downloadProgress((videoId, estimatedDownloadTime, percent) => {
-      console.log('progress', videoId);
       setDownloadProgress({
         videoId,
         estimatedDownloadTime,
@@ -57,21 +64,29 @@ export const DownloadQueue = () => {
       setDownloadProgress(null)
       await updateVideoStatus({ id: videoId, status: 'downloaded' })
     })
-
-
-
   }, [])
 
-  useEffect(() => {
 
+
+  useEffect(() => {
     if (!downloadProgress) {
+      console.log(1);
+
       if (videoInDownloadStatus) {
+        console.log(2);
+
         fileDownloadCommunicator.call.currentDownloadVideoId().then((videoId: string) => {
-          if (videoInDownloadStatus.id !== videoId) {
+          console.log(3);
+
+          if (videoId && videoInDownloadStatus.id !== videoId) {
+            console.log(4, videoId);
+
             startDownload(videoInDownloadStatus.id, videoInDownloadStatus.name, appSettings?.downloadPath)
           }
         })
       } else if (queuedVideos.length) {
+        console.log(5);
+
         startDownload(queuedVideos[0].id, queuedVideos[0].name, appSettings?.downloadPath)
       }
     }

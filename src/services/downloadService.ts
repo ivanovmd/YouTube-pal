@@ -90,5 +90,6 @@ export class DownloadService extends BaseSingleton {
       this.currentStream = null
     })
 
+    return videoId;
   }
 }

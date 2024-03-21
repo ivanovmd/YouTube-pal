@@ -25,7 +25,7 @@ export const Video = ({ videoDetails }) => {
     setIsDownloading(true)
   }
 
-  const addToTheQueue = () => {
+  const addToTheQueue = async () => {
     const videoData: VideoData = {
       id: videoDetails.resourceId.videoId,
       name: videoDetails.title,
@@ -33,7 +33,7 @@ export const Video = ({ videoDetails }) => {
       downloadPath: downloadPath || './downloads',
       status: 'queued'
     }
-    addVideoForDownload(videoData)
+    await addVideoForDownload(videoData)
   }
 
   return (
@@ -52,7 +52,7 @@ export const Video = ({ videoDetails }) => {
         ><span>{videoDetails?.title}</span></Typography>
 
         <IconButton aria-label="delete" size="sm"
-          onClick={() => addToTheQueue()}
+          onClick={async () => await addToTheQueue()}
           //onClick={() => openExternalCommunicator.call.openExternal('https://www.youtube.com/watch?v=' + videoDetails.resourceId.videoId)}
           loading={isDownloading}>
           <FileDownload fontSize="inherit" />

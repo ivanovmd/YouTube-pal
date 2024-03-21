@@ -26,25 +26,14 @@ export const videosApi = createApi({
   tagTypes: ['video'],
   endpoints: (builder) => ({
     getVideos: builder.query({
-      providesTags: (result) =>
-        result
-          ? [
-            ...result.map(({ id }) => ({ type: 'video' as const, id })),
-            { type: 'video', id: 'LIST' },
-          ]
-          : [{ type: 'video', id: 'LIST' }],
+      providesTags: ['video'],
       queryFn: async () => {
         const videos = await videosCallers.find({})
         return { data: videos }
       },
     }),
     getVideo: builder.query({
-      providesTags: (_, error, id) => {
-        if (error || !id) {
-          return ['video'];
-        }
-        return [{ type: 'video', id: id }];
-      },
+      providesTags: ['video'],
       queryFn: async (id: string) => {
         const response = await videosCallers.findOne({ id })
         return { data: response?.video }
@@ -57,12 +46,7 @@ export const videosApi = createApi({
       },
     }),
     updateVideoStatus: builder.mutation({
-      invalidatesTags: (result, error, { id }) => {
-        if (error) {
-          return [];
-        }
-        return [{ type: 'video', id }];
-      },
+      invalidatesTags: ['video'],
       queryFn: async ({ status, id }) => {
         const response = await videosCallers.update({ id }, { $set: { status } })
         return response
